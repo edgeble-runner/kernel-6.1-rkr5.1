@@ -36,7 +36,7 @@ jobs:
           ssh -T git@gitlab.com || echo "SSH connection test failed, but continuing..."
 
       - name: Clone Kernel
-        run: git clone git@gitlab.com:edgeble/core/kernel-6.1.git
+        run: git clone -b linux-6.1-stan-rkr5.1 git@gitlab.com:edgeble/core/kernel-6.1.git
 
       - name: Copy runner.config
         run: cp .github/workflows/runner.config kernel-6.1/arch/arm64/configs/runner.config
@@ -45,7 +45,7 @@ jobs:
         run: |
           cd kernel-6.1
           export CROSS_COMPILE=aarch64-linux-gnu-
-          ARCH=arm64 make rockchip_linux_defconfig gpu.config edgeble-6tops.config runner.config
+          ARCH=arm64 make rockchip_linux_defconfig runner.config
           mkdir -p ${{ github.workspace }}/out
           mkdir -p ${{ github.workspace }}/out/linux-6.1
           mkdir -p ${{ github.workspace }}/out/dtb/rockchip
@@ -75,9 +75,9 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v1.24"
+          tag_name: "v1.01"
           body: |
-            - Enable 1080@60fps
+            - New release on rkr5.1
           files: |
             ${{ github.workspace }}/out/linux-6.1.tar.xz
             ${{ github.workspace }}/out/modules-6.1.tar.xz
